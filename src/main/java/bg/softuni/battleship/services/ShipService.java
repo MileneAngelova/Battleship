@@ -37,13 +37,6 @@ public class ShipService {
             return false;
         }
 
-//        CategoryNameEnum name = switch (addShipDTO.getCategory()) {
-//            case 0 -> CategoryNameEnum.BATTLE;
-//            case 1 -> CategoryNameEnum.PATROL;
-//            case 2 -> CategoryNameEnum.CARGO;
-//            default -> CategoryNameEnum.BATTLE;
-//        };
-
         Category category = this.categoryRepository.findByName(addShipDTO.getCategory());
         Optional<User> owner = this.userRepository.findByUsername(this.loggedUser.getUsername());
 
@@ -71,6 +64,12 @@ public class ShipService {
         return this.shipRepository.findByUserIdNot(enemyId)
                 .stream()
                 .map(ShipDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<ShipDTO> getAllSortedShips() {
+        return this.shipRepository.findAllByOrderByNameAscHealthAscPowerAsc()
+                .stream().map(ShipDTO::new)
                 .collect(Collectors.toList());
     }
 }

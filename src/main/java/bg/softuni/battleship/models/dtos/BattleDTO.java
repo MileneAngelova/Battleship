@@ -3,6 +3,7 @@ package bg.softuni.battleship.models.dtos;
 import jakarta.validation.constraints.Positive;
 
 public class BattleDTO {
+    private Long id;
     @Positive
     private Long attackerId;
 
@@ -28,5 +29,9 @@ public class BattleDTO {
     public BattleDTO setDefenderId(Long defenderId) {
         this.defenderId = defenderId;
         return this;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
