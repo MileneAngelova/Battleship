@@ -25,16 +25,27 @@ public class RegisterController {
 
     @GetMapping("/register")
     public String register() {
+        if (this.userService.isLoggedIn()) {
+            return "redirect:/home";
+        }
         return "register";
     }
 
     @PostMapping("/register")
     public String userRegister(@Valid RegisterDTO registerModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+        if (this.userService.isLoggedIn()) {
+            return "redirect:/home";
+        }
+
         if (bindingResult.hasErrors() || !userService.register(registerModel)) {
             redirectAttributes.addFlashAttribute("registerModel", registerModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.registerModel", bindingResult);
 
             return "redirect:/register";
+        }
+        if (this.userService.isLoggedIn()) {
+            return "redirect:/home";
         }
         return "redirect:/login";
     }

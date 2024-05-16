@@ -13,16 +13,10 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final LoggedUser loggedUser;
-//    private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository, LoggedUser loggedUser) {
         this.userRepository = userRepository;
         this.loggedUser = loggedUser;
-    }
-
-    public boolean userExist(LoginDTO loginDTO) {
-        Optional<User> byUsername = this.userRepository.findByUsername(loginDTO.getUsername());
-        return byUsername.isPresent();
     }
 
     public boolean register(RegisterDTO registerDTO) {
@@ -41,6 +35,7 @@ public class UserService {
         }
 
         User newUser = new User();
+
         newUser.setUsername(registerDTO.getUsername());
         newUser.setPassword(registerDTO.getPassword());
         newUser.setEmail(registerDTO.getEmail());
@@ -50,13 +45,29 @@ public class UserService {
         return true;
     }
 
-    public boolean login(LoginDTO loginDTO) {
+    public boolean userExist(LoginDTO loginDTO) {
         Optional<User> optUser = this.userRepository.findByUsernameAndPassword(loginDTO.getUsername(), loginDTO.getPassword());
+
         if (optUser.isEmpty()) {
             return false;
         }
-
         this.loggedUser.login(optUser.get());
         return true;
+    }
+
+    public boolean isLoggedIn() {
+       if (loggedUser.getId() == null) {
+           return false;
+       } else {
+           return true;
+       }
+    }
+
+    public void logout() {
+        this.loggedUser.logout();
+    }
+
+    public Long getLoggedUserId() {
+        return loggedUser.getId();
     }
 }

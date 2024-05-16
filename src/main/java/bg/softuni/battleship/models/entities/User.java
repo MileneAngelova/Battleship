@@ -29,6 +29,11 @@ public class User {
         return id;
     }
 
+    public User setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public String getUsername() {
         return username;
     }
